@@ -1,0 +1,34 @@
+using PTruequeU.Models.Enums;
+using System.ComponentModel.DataAnnotations;
+
+namespace PTruequeU.DTOs.Listings
+{
+    public class CreateListingDto
+    {
+        [Required]
+        [MaxLength(200)]
+        public string Title { get; set; } = string.Empty;
+
+        [Required]
+        [MaxLength(2000)]
+        public string Description { get; set; } = string.Empty;
+
+        [Required]
+        public ListingCondition Condition { get; set; }
+
+        [Required]
+        [Range(0.01, 999999.99)]
+        public decimal Price { get; set; }
+
+        [Required]
+        [MaxLength(200)]
+        public string Location { get; set; } = string.Empty;
+
+        [Required]
+        public int CategoryId { get; set; }
+
+        [Required]
+        [MinLength(3, ErrorMessage = "At least 3 images are required.")]
+        public List<string> ImageUrls { get; set; } = new();
+    }
+}
