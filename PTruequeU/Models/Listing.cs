@@ -1,6 +1,6 @@
 ﻿namespace PTruequeU.Models
 {
-    public class Trueques
+    public class Listing
     {
     }
 }

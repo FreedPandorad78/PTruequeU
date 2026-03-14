@@ -2,7 +2,7 @@
 
 namespace PTruequeU.Controllers
 {
-    public class TruequeController : Controller
+    public class ListingsController : Controller
     {
         public IActionResult Index()
         {
