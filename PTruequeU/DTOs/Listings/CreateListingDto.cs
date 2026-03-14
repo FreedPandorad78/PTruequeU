@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PTruequeU.DTOs.Listings
 {
-    public class CreateListingDto
+    public class CreateListingDto : IValidatableObject
     {
         [Required]
         [MaxLength(200)]
@@ -28,7 +28,16 @@ namespace PTruequeU.DTOs.Listings
         public int CategoryId { get; set; }
 
         [Required]
-        [MinLength(3, ErrorMessage = "At least 3 images are required.")]
         public List<string> ImageUrls { get; set; } = new();
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (ImageUrls == null || ImageUrls.Count < 3)
+            {
+                yield return new ValidationResult(
+                    "At least 3 images are required.",
+                    new[] { nameof(ImageUrls) });
+            }
+        }
     }
 }

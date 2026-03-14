@@ -9,12 +9,10 @@ namespace PTruequeU.Services
     public class FavoriteService : IFavoriteService
     {
         private readonly ApplicationDbContext _context;
-        private readonly IListingService _listingService;
 
-        public FavoriteService(ApplicationDbContext context, IListingService listingService)
+        public FavoriteService(ApplicationDbContext context)
         {
             _context = context;
-            _listingService = listingService;
         }
 
         public async Task<bool> ToggleFavoriteAsync(string userId, int listingId)
@@ -46,13 +44,37 @@ namespace PTruequeU.Services
                 .Select(f => f.ListingId)
                 .ToListAsync();
 
-            var results = new List<ListingResponseDto>();
-            foreach (var listingId in favoriteListingIds)
+            var listings = await _context.Listings
+                .Include(l => l.User)
+                .Include(l => l.Category)
+                .Include(l => l.Images.OrderBy(i => i.DisplayOrder))
+                .Include(l => l.Favorites)
+                .Where(l => favoriteListingIds.Contains(l.Id) && !l.IsHidden)
+                .ToListAsync();
+
+            return listings.Select(l => new ListingResponseDto
             {
-                var listing = await _listingService.GetByIdAsync(listingId);
-                if (listing != null) results.Add(listing);
-            }
-            return results;
+                Id = l.Id,
+                Title = l.Title,
+                Description = l.Description,
+                Condition = l.Condition,
+                Price = l.Price,
+                Location = l.Location,
+                State = l.State,
+                CreatedAt = l.CreatedAt,
+                UpdatedAt = l.UpdatedAt,
+                UserId = l.UserId,
+                UserFullName = l.User?.FullName ?? string.Empty,
+                CategoryId = l.CategoryId,
+                CategoryName = l.Category?.Name ?? string.Empty,
+                Images = l.Images?.Select(i => new ListingImageDto
+                {
+                    Id = i.Id,
+                    ImageUrl = i.ImageUrl,
+                    DisplayOrder = i.DisplayOrder
+                }).ToList() ?? new List<ListingImageDto>(),
+                FavoriteCount = l.Favorites?.Count ?? 0
+            }).ToList();
         }
 
         public async Task<bool> IsFavoritedAsync(string userId, int listingId)

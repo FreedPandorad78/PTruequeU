@@ -31,7 +31,14 @@ namespace PTruequeU.Services
             _context.Reports.Add(report);
             await _context.SaveChangesAsync();
 
-            return await MapToDtoAsync(report);
+            // Reload with navigation properties
+            var saved = await _context.Reports
+                .Include(r => r.Reporter)
+                .Include(r => r.Listing)
+                .Include(r => r.ReportedUser)
+                .FirstAsync(r => r.Id == report.Id);
+
+            return MapToDto(saved);
         }
 
         public async Task<List<ReportResponseDto>> GetAllReportsAsync()
@@ -60,29 +67,6 @@ namespace PTruequeU.Services
             await _context.SaveChangesAsync();
 
             return MapToDto(report);
-        }
-
-        private async Task<ReportResponseDto> MapToDtoAsync(Report report)
-        {
-            var reporter = await _context.Users.FindAsync(report.ReporterId);
-            var listing = report.ListingId.HasValue ? await _context.Listings.FindAsync(report.ListingId) : null;
-            var reportedUser = report.ReportedUserId != null ? await _context.Users.FindAsync(report.ReportedUserId) : null;
-
-            return new ReportResponseDto
-            {
-                Id = report.Id,
-                TargetType = report.TargetType,
-                ListingId = report.ListingId,
-                ListingTitle = listing?.Title,
-                ReportedUserId = report.ReportedUserId,
-                ReportedUserName = reportedUser?.FullName,
-                Reason = report.Reason,
-                Comment = report.Comment,
-                IsResolved = report.IsResolved,
-                CreatedAt = report.CreatedAt,
-                ReporterId = report.ReporterId,
-                ReporterName = reporter?.FullName ?? string.Empty
-            };
         }
 
         private static ReportResponseDto MapToDto(Report report)
