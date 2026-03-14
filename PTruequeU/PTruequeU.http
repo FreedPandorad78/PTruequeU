@@ -1,6 +1,35 @@
 @PTruequeU_HostAddress = http://localhost:5088
 
-GET {{PTruequeU_HostAddress}}/weatherforecast/
+### Register a new user
+POST {{PTruequeU_HostAddress}}/api/Auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Test User",
+  "email": "test@truequeu.edu",
+  "password": "Password123!",
+  "program": "Ingeniería Web"
+}
+
+### Login
+POST {{PTruequeU_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": "carlos.martinez@truequeu.edu",
+  "password": "Password123!"
+}
+
+### Get all listings
+GET {{PTruequeU_HostAddress}}/api/Listings
+Accept: application/json
+
+### Search listings by keyword
+GET {{PTruequeU_HostAddress}}/api/Listings?Keyword=laptop
+Accept: application/json
+
+### Get categories
+GET {{PTruequeU_HostAddress}}/api/Categories
 Accept: application/json
 
 ###

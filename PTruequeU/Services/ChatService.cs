@@ -27,7 +27,7 @@ namespace PTruequeU.Services
                 .Include(c => c.Listing)
                 .Include(c => c.Buyer)
                 .Include(c => c.Seller)
-                .Include(c => c.Messages.OrderByDescending(m => m.SentAt).Take(1))
+                .Include(c => c.Messages)
                     .ThenInclude(m => m.Sender)
                 .FirstOrDefaultAsync(c => c.ListingId == listingId && c.BuyerId == buyerId);
 
@@ -113,7 +113,7 @@ namespace PTruequeU.Services
                 .Include(c => c.Listing)
                 .Include(c => c.Buyer)
                 .Include(c => c.Seller)
-                .Include(c => c.Messages.OrderByDescending(m => m.SentAt).Take(1))
+                .Include(c => c.Messages)
                     .ThenInclude(m => m.Sender)
                 .Where(c => c.BuyerId == userId || c.SellerId == userId)
                 .OrderByDescending(c => c.CreatedAt)

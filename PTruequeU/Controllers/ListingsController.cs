@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PTruequeU.DTOs.Listings;
 using PTruequeU.Interfaces;
+using PTruequeU.Models;
 using System.Security.Claims;
 
 namespace PTruequeU.Controllers
@@ -11,10 +13,12 @@ namespace PTruequeU.Controllers
     public class ListingsController : ControllerBase
     {
         private readonly IListingService _listingService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ListingsController(IListingService listingService)
+        public ListingsController(IListingService listingService, UserManager<ApplicationUser> userManager)
         {
             _listingService = listingService;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -37,6 +41,10 @@ namespace PTruequeU.Controllers
         public async Task<ActionResult<ListingResponseDto>> Create(CreateListingDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null && user.IsSuspended)
+                return Forbid();
+
             var listing = await _listingService.CreateAsync(userId, dto);
             return CreatedAtAction(nameof(GetById), new { id = listing.Id }, listing);
         }
