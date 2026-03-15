@@ -1,0 +1,10 @@
+﻿namespace PTruequeU.Models
+{
+    public class Category
+    {
+        public Guid Category_Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+
+        public ICollection<Listing> Listings { get; set; } = new List<Listing>();
+    }
+}

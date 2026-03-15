@@ -1,6 +1,6 @@
 ﻿namespace PTruequeU.Interfaces
 {
-    public interface ITruequesServices
+    public interface IAuthService
     {
     }
 }

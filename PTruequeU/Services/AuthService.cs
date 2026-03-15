@@ -1,6 +1,6 @@
 ﻿namespace PTruequeU.Services
 {
-    public class TruequesService
+    public class AuthService
     {
     }
 }
