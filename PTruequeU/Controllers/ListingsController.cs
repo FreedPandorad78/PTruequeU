@@ -21,15 +21,18 @@ namespace PTruequeU.Controllers
             _userManager = userManager;
         }
 
-      
+
         [HttpGet]
-        public async Task<ActionResult<List<ListingResponseDto>>> Search([FromQuery] ListingSearchDto search)
+        public async Task<ActionResult<IEnumerable<ListingResponseDto>>> GetAll([FromQuery] ListingSearchDto search)
         {
-            var listings = await _listingService.Search(search);
-            return Ok(listings);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            var role = User.FindFirstValue(ClaimTypes.Role);
+            var isAdmin = role == "Admin";
+
+            var result = await _listingService.Search(search, userId, isAdmin);
+            return Ok(result);
         }
 
-     
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<ListingResponseDto>> GetById(Guid id)
         {
