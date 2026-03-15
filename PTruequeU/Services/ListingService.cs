@@ -29,7 +29,7 @@ namespace PTruequeU.Services
                 Title = dto.Title,
                 Description = dto.Description,
                 Condition = dto.Condition,
-                Price = dto.Price,
+                Price = (decimal)dto.Price, //No dejaba con double, entonces puse un cast decimal para arreglar el error.
                 Location = dto.Location,
                 Category_Id = dto.CategoryId,
                 User_Id = userId,
@@ -136,7 +136,7 @@ namespace PTruequeU.Services
             if (dto.Title != null) listing.Title = dto.Title;
             if (dto.Description != null) listing.Description = dto.Description;
             if (dto.Condition.HasValue) listing.Condition = dto.Condition.Value;
-            if (dto.Price.HasValue) listing.Price = dto.Price.Value;
+            if (dto.Price.HasValue) listing.Price = (decimal)dto.Price.Value;
             if (dto.Location != null) listing.Location = dto.Location;
             if (dto.CategoryId.HasValue) listing.Category_Id = dto.CategoryId.Value;
 
@@ -154,7 +154,14 @@ namespace PTruequeU.Services
             var listing = await _context.Listings.FirstOrDefaultAsync(l => l.Listing_id == id);
             if (listing == null || listing.User_Id != userId) return null;
 
-            if (listing.State == ListingState.Sold && dto.State == ListingState.Available)
+            // Transiciones válidas del flujo:
+            // Available -> Reserved
+            // Reserved  -> Sold
+            bool validTransition =
+                (listing.State == ListingState.Available && dto.State == ListingState.Reserved) ||
+                (listing.State == ListingState.Reserved && dto.State == ListingState.Sold);
+
+            if (!validTransition)
                 return null;
 
             listing.State = dto.State;

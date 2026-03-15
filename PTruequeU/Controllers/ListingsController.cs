@@ -71,10 +71,13 @@ namespace PTruequeU.Controllers
         [HttpPatch("{id:guid}/state")]
         public async Task<ActionResult<ListingResponseDto>> UpdateState(Guid id, [FromBody] UpdateListingStateDto dto)
         {
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
             var listing = await _listingService.UpdateState(id, userId, dto);
-            if (listing == null) return BadRequest("Invalid state transition or listing not found.");
+            if (listing == null) return BadRequest("Transición de estado inválida, publicación no encontrada o no eres el propietario.");
 
             return Ok(listing);
         }
