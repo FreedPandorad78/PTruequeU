@@ -48,6 +48,7 @@ builder.Services.AddAuthorization();
 
 // Servicios app
 builder.Services.AddScoped<IListingService, ListingService>();
+builder.Services.AddScoped<IChatService, ChatService>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
