@@ -1,6 +1,9 @@
 ﻿namespace PTruequeU.Models.Enums
 {
-    public class ListingState
+    public enum ListingState
     {
+        Available = 0,
+        Reserved = 1,
+        Sold = 2
     }
 }
