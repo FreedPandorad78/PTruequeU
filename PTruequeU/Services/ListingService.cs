@@ -77,14 +77,17 @@ namespace PTruequeU.Services
 
         // Búsqueda de publicaciones con filtros dinámicos + paginación.
         // Solo retorna publicaciones visibles (no hidden).
-        public async Task<List<ListingResponseDto>> Search(ListingSearchDto search)
+        public async Task<List<ListingResponseDto>> Search(ListingSearchDto search, string userId, bool isAdmin)
         {
             var query = _context.Listings
                 .Include(l => l.User)
                 .Include(l => l.Category)
                 .Include(l => l.Images.OrderBy(i => i.DisplayOrder))
-                .Where(l => !l.IsHidden)
                 .AsQueryable();
+
+            // hidden solo para no-admin
+            if (!isAdmin)
+                query = query.Where(l => !l.IsHidden);
 
             // Filtro por palabra clave en título o descripción.
             if (!string.IsNullOrWhiteSpace(search.Keyword))
@@ -99,10 +102,10 @@ namespace PTruequeU.Services
                 query = query.Where(l => l.Category_Id == search.CategoryId.Value);
 
             if (search.MinPrice.HasValue)
-                query = query.Where(l => l.Price >= (decimal)search.MinPrice.Value);
+                query = query.Where(l => l.Price >= search.MinPrice.Value);
 
             if (search.MaxPrice.HasValue)
-                query = query.Where(l => l.Price <= (decimal)search.MaxPrice.Value);
+                query = query.Where(l => l.Price <= search.MaxPrice.Value);
 
             if (search.Condition.HasValue)
                 query = query.Where(l => l.Condition == search.Condition.Value);
