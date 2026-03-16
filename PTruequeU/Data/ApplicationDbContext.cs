@@ -18,6 +18,9 @@ namespace PTruequeU.Data
 
         public DbSet<Favorite> Favorites { get; set; }
 
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<ModerationAction> ModerationActions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -29,6 +32,10 @@ namespace PTruequeU.Data
             builder.Entity<ChatThread>().HasKey(t => t.ChatThread_Id);
             builder.Entity<ChatMessage>().HasKey(m => m.ChatMessage_Id);
             builder.Entity<Favorite>().HasKey(f => f.Favorite_Id);
+
+            builder.Entity<Report>().HasKey(r => r.Report_Id);
+            builder.Entity<ModerationAction>().HasKey(a => a.ModerationAction_Id);
+
 
             // Listing -> Category
             builder.Entity<Listing>()
@@ -43,6 +50,11 @@ namespace PTruequeU.Data
                 .WithMany(u => u.Listings)
                 .HasForeignKey(l => l.User_Id)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Listing.Price
+            builder.Entity<Listing>()
+                .Property(l => l.Price)
+                .HasColumnType("decimal(18,2)");
 
             // ListingImage -> Listing
             builder.Entity<ListingImage>()
@@ -109,6 +121,59 @@ namespace PTruequeU.Data
             builder.Entity<Favorite>()
                 .HasIndex(f => new { f.User_Id, f.Listing_Id })
                 .IsUnique();
+
+
+
+
+            // Report -> Reporter
+            builder.Entity<Report>()
+                .HasOne(r => r.Reporter)
+                .WithMany()
+                .HasForeignKey(r => r.Reporter_Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Report -> ReportedUser
+            builder.Entity<Report>()
+                .HasOne(r => r.ReportedUser)
+                .WithMany()
+                .HasForeignKey(r => r.ReportedUser_Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Report -> ReportedListing
+            builder.Entity<Report>()
+                .HasOne(r => r.ReportedListing)
+                .WithMany()
+                .HasForeignKey(r => r.ReportedListing_Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // ModerationAction -> Admin
+            builder.Entity<ModerationAction>()
+                .HasOne(a => a.Admin)
+                .WithMany()
+                .HasForeignKey(a => a.Admin_Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Índices útiles
+            builder.Entity<Report>()
+                .HasIndex(r => r.Reporter_Id);
+
+            builder.Entity<Report>()
+                .HasIndex(r => r.ReportedUser_Id);
+
+            builder.Entity<Report>()
+                .HasIndex(r => r.ReportedListing_Id);
+
+            builder.Entity<Report>()
+                .HasIndex(r => r.CreatedAt);
+
+            builder.Entity<ModerationAction>()
+                .HasIndex(a => a.Admin_Id);
+
+            builder.Entity<ModerationAction>()
+                .HasIndex(a => a.TargetId);
+
+            builder.Entity<ModerationAction>()
+                .HasIndex(a => a.CreatedAt);
         }
     }
 }

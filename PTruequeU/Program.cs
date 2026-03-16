@@ -50,6 +50,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IListingService, ListingService>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IFavoriteService, FavoriteService>();
+builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IAdminModerationService, AdminModerationService>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
