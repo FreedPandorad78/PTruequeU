@@ -45,7 +45,10 @@ namespace PTruequeU.Controllers
                 });
             }
 
-            var token = GenerateJwt(user);
+            // Rol por defecto al registrarse
+            await _userManager.AddToRoleAsync(user, "User");
+
+            var token = await GenerateJwt(user);
 
             return Ok(new AuthResponseDto
             {
@@ -89,7 +92,7 @@ namespace PTruequeU.Controllers
                 });
             }
 
-            var token = GenerateJwt(user);
+            var token = await GenerateJwt(user);
 
             return Ok(new AuthResponseDto
             {
@@ -99,12 +102,16 @@ namespace PTruequeU.Controllers
             });
         }
 
-        private string GenerateJwt(ApplicationUser user)
+        private async Task<string> GenerateJwt(ApplicationUser user)
         {
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault() ?? "User";
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Email, user.Email ?? "")
+                new Claim(ClaimTypes.Email, user.Email ?? ""),
+                new Claim(ClaimTypes.Role, role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));

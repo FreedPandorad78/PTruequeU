@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PTruequeU.Data;
 
@@ -11,9 +12,11 @@ using PTruequeU.Data;
 namespace PTruequeU.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260316003305_AddFavoritesModule")]
+    partial class AddFavoritesModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -406,84 +409,6 @@ namespace PTruequeU.Migrations
                     b.ToTable("ListingImages");
                 });
 
-            modelBuilder.Entity("PTruequeU.Models.ModerationAction", b =>
-                {
-                    b.Property<Guid>("ModerationAction_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ActionType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Admin_Id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TargetId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ModerationAction_Id");
-
-                    b.HasIndex("Admin_Id");
-
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("TargetId");
-
-                    b.ToTable("ModerationActions");
-                });
-
-            modelBuilder.Entity("PTruequeU.Models.Report", b =>
-                {
-                    b.Property<Guid>("Report_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ReportedListing_Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ReportedUser_Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Reporter_Id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("TargetType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Report_Id");
-
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("ReportedListing_Id");
-
-                    b.HasIndex("ReportedUser_Id");
-
-                    b.HasIndex("Reporter_Id");
-
-                    b.ToTable("Reports");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -628,42 +553,6 @@ namespace PTruequeU.Migrations
                         .IsRequired();
 
                     b.Navigation("Listing");
-                });
-
-            modelBuilder.Entity("PTruequeU.Models.ModerationAction", b =>
-                {
-                    b.HasOne("PTruequeU.Models.ApplicationUser", "Admin")
-                        .WithMany()
-                        .HasForeignKey("Admin_Id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Admin");
-                });
-
-            modelBuilder.Entity("PTruequeU.Models.Report", b =>
-                {
-                    b.HasOne("PTruequeU.Models.Listing", "ReportedListing")
-                        .WithMany()
-                        .HasForeignKey("ReportedListing_Id")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PTruequeU.Models.ApplicationUser", "ReportedUser")
-                        .WithMany()
-                        .HasForeignKey("ReportedUser_Id")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PTruequeU.Models.ApplicationUser", "Reporter")
-                        .WithMany()
-                        .HasForeignKey("Reporter_Id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ReportedListing");
-
-                    b.Navigation("ReportedUser");
-
-                    b.Navigation("Reporter");
                 });
 
             modelBuilder.Entity("PTruequeU.Models.ApplicationUser", b =>
