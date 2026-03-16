@@ -20,6 +20,18 @@ namespace PTruequeU.Services
 
         public async Task<ChatThreadResponseDto?> StartChat(string currentUserId, StartChatRequestDto dto)
         {
+            var currentUser = await _userManager.FindByIdAsync(currentUserId);
+
+            if (currentUser == null)
+            {
+                throw new InvalidOperationException("Usuario autenticado no encontrado.");
+            }
+
+            if (currentUser.IsSuspended)
+            {
+                throw new InvalidOperationException("Tu cuenta está suspendida y no puedes iniciar chats.");
+            }
+
             var listing = await _context.Listings
                 .FirstOrDefaultAsync(l => l.Listing_id == dto.ListingId);
 
