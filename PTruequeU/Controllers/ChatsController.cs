@@ -24,20 +24,21 @@ namespace PTruequeU.Controllers
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-
             try
             {
                 var thread = await _chatService.StartChat(userId, dto);
-                if (thread == null) return NotFound("Listing no encontrado.");
                 return Ok(thread);
             }
             catch (InvalidOperationException ex)
             {
+                if (ex.Message.StartsWith("Listing no encontrado"))
+                    return NotFound(ex.Message);
+
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpGet]
+            [HttpGet]
         public async Task<IActionResult> GetMyChats()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;

@@ -33,11 +33,12 @@ namespace PTruequeU.Services
             }
 
             var listing = await _context.Listings
-                .FirstOrDefaultAsync(l => l.Listing_id == dto.ListingId);
+            .AsNoTracking()
+            .SingleOrDefaultAsync(l => l.Listing_id == dto.ListingId);
 
             if (listing == null)
             {
-                return null;
+                throw new InvalidOperationException($"Listing no encontrado para id: {dto.ListingId}");
             }
 
             var sellerId = listing.User_Id;

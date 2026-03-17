@@ -21,7 +21,7 @@ builder.Services
     {
         options.User.RequireUniqueEmail = true;
     })
-    .AddRoles<IdentityRole>() // <- importante
+    .AddRoles<IdentityRole>() 
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager<SignInManager<ApplicationUser>>();
 
@@ -57,6 +57,13 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await db.Database.MigrateAsync();
+    await DbSeeder.Seed(db);
+}
 
 if (app.Environment.IsDevelopment())
 {

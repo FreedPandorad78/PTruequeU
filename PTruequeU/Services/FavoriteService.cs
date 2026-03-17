@@ -82,15 +82,14 @@ namespace PTruequeU.Services
         public async Task<List<FavoriteResponseDto>> GetMyFavorites(string currentUserId)
         {
             if (string.IsNullOrWhiteSpace(currentUserId))
-            {
                 throw new UnauthorizedAccessException("Usuario no autenticado.");
-            }
 
             var favorites = await _context.Favorites
+                .AsNoTracking()
                 .Include(f => f.Listing)!
                     .ThenInclude(l => l.Images)
-                .Where(f => f.User_Id == currentUserId && f.Listing != null && !f.Listing.IsHidden)
-                .OrderByDescending(f => f.Listing!.CreatedAt)
+                .Where(f => f.User_Id == currentUserId && f.Listing != null)
+                .OrderByDescending(f => f.Favorite_Id)
                 .ToListAsync();
 
             return favorites

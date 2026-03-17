@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PTruequeU.Models;
-using System.Reflection.Emit;
 
 namespace PTruequeU.Data
 {
@@ -35,7 +35,6 @@ namespace PTruequeU.Data
 
             builder.Entity<Report>().HasKey(r => r.Report_Id);
             builder.Entity<ModerationAction>().HasKey(a => a.ModerationAction_Id);
-
 
             // Listing -> Category
             builder.Entity<Listing>()
@@ -122,9 +121,6 @@ namespace PTruequeU.Data
                 .HasIndex(f => new { f.User_Id, f.Listing_Id })
                 .IsUnique();
 
-
-
-
             // Report -> Reporter
             builder.Entity<Report>()
                 .HasOne(r => r.Reporter)
@@ -154,26 +150,66 @@ namespace PTruequeU.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Índices útiles
-            builder.Entity<Report>()
-                .HasIndex(r => r.Reporter_Id);
+            builder.Entity<Report>().HasIndex(r => r.Reporter_Id);
+            builder.Entity<Report>().HasIndex(r => r.ReportedUser_Id);
+            builder.Entity<Report>().HasIndex(r => r.ReportedListing_Id);
+            builder.Entity<Report>().HasIndex(r => r.CreatedAt);
 
-            builder.Entity<Report>()
-                .HasIndex(r => r.ReportedUser_Id);
+            builder.Entity<ModerationAction>().HasIndex(a => a.Admin_Id);
+            builder.Entity<ModerationAction>().HasIndex(a => a.TargetId);
+            builder.Entity<ModerationAction>().HasIndex(a => a.CreatedAt);
 
-            builder.Entity<Report>()
-                .HasIndex(r => r.ReportedListing_Id);
+          
+            // SEED 
+            // 1) Roles
+            var adminRoleId = "11111111-1111-1111-1111-111111111111";
+            var userRoleId = "22222222-2222-2222-2222-222222222222";
 
-            builder.Entity<Report>()
-                .HasIndex(r => r.CreatedAt);
+            builder.Entity<IdentityRole>().HasData(
+                new IdentityRole
+                {
+                    Id = adminRoleId,
+                    Name = "Admin",
+                    NormalizedName = "ADMIN",
+                    ConcurrencyStamp = "11111111-aaaa-1111-aaaa-111111111111"
+                },
+                new IdentityRole
+                {
+                    Id = userRoleId,
+                    Name = "User",
+                    NormalizedName = "USER",
+                    ConcurrencyStamp = "22222222-bbbb-2222-bbbb-222222222222"
+                }
+            );
 
-            builder.Entity<ModerationAction>()
-                .HasIndex(a => a.Admin_Id);
-
-            builder.Entity<ModerationAction>()
-                .HasIndex(a => a.TargetId);
-
-            builder.Entity<ModerationAction>()
-                .HasIndex(a => a.CreatedAt);
+            // 2) Categorías base
+            builder.Entity<Category>().HasData(
+                new Category
+                {
+                    Category_Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"),
+                    Name = "Electrónica"
+                },
+                new Category
+                {
+                    Category_Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa2"),
+                    Name = "Hogar"
+                },
+                new Category
+                {
+                    Category_Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa3"),
+                    Name = "Ropa"
+                },
+                new Category
+                {
+                    Category_Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa4"),
+                    Name = "Deportes"
+                },
+                new Category
+                {
+                    Category_Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa5"),
+                    Name = "Libros"
+                }
+            );
         }
     }
 }
