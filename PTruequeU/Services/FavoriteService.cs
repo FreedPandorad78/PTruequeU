@@ -47,7 +47,7 @@ namespace PTruequeU.Services
 
             var favorite = new Favorite
             {
-                Favorite_Id = Guid.NewGuid(),
+                Favorite_Id = new Guid("a90991ea-a5c5-461a-b53d-f854b8c6910a"),
                 Listing_Id = listingId,
                 User_Id = currentUserId
             };
