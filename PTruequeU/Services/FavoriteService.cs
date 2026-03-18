@@ -47,7 +47,7 @@ namespace PTruequeU.Services
 
             var favorite = new Favorite
             {
-                Favorite_Id = Guid.NewGuid(),
+                Favorite_Id = new Guid("a90991ea-a5c5-461a-b53d-f854b8c6910a"),
                 Listing_Id = listingId,
                 User_Id = currentUserId
             };
@@ -82,15 +82,14 @@ namespace PTruequeU.Services
         public async Task<List<FavoriteResponseDto>> GetMyFavorites(string currentUserId)
         {
             if (string.IsNullOrWhiteSpace(currentUserId))
-            {
                 throw new UnauthorizedAccessException("Usuario no autenticado.");
-            }
 
             var favorites = await _context.Favorites
+                .AsNoTracking()
                 .Include(f => f.Listing)!
                     .ThenInclude(l => l.Images)
-                .Where(f => f.User_Id == currentUserId && f.Listing != null && !f.Listing.IsHidden)
-                .OrderByDescending(f => f.Listing!.CreatedAt)
+                .Where(f => f.User_Id == currentUserId && f.Listing != null)
+                .OrderByDescending(f => f.Favorite_Id)
                 .ToListAsync();
 
             return favorites

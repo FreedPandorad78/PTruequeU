@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PTruequeU.Data;
 
@@ -11,9 +12,11 @@ using PTruequeU.Data;
 namespace PTruequeU.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260317234234_initData")]
+    partial class initData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,7 +262,6 @@ namespace PTruequeU.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ANDREA@EMAIL.COM",
                             NormalizedUserName = "ANDREA",
-                            PasswordHash = "AQAAAAIAAYagAAAAENx4zxiRrAfPtkZV5vFfJ+RgEHgHrAvRjf6bdYMLzInq/XWu7gibD/0GBKoPO3EBEg==",
                             PhoneNumberConfirmed = false,
                             Rating = 0.0,
                             SecurityStamp = "SECSTAMP-STATIC-0000000000000001",
@@ -277,7 +279,6 @@ namespace PTruequeU.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "BRUNO@EMAIL.COM",
                             NormalizedUserName = "BRUNO",
-                            PasswordHash = "AQAAAAIAAYagAAAAENx4zxiRrAfPtkZV5vFfJ+RgEHgHrAvRjf6bdYMLzInq/XWu7gibD/0GBKoPO3EBEg==",
                             PhoneNumberConfirmed = false,
                             Rating = 0.0,
                             SecurityStamp = "SECSTAMP-STATIC-0000000000000002",
@@ -295,7 +296,6 @@ namespace PTruequeU.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "CARLA@EMAIL.COM",
                             NormalizedUserName = "CARLA",
-                            PasswordHash = "AQAAAAIAAYagAAAAENx4zxiRrAfPtkZV5vFfJ+RgEHgHrAvRjf6bdYMLzInq/XWu7gibD/0GBKoPO3EBEg==",
                             PhoneNumberConfirmed = false,
                             Rating = 0.0,
                             SecurityStamp = "SECSTAMP-STATIC-0000000000000003",
