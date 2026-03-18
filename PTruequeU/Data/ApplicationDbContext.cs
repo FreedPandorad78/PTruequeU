@@ -174,43 +174,44 @@ namespace PTruequeU.Data
                 }
             );
 
-            // Usuarios
             builder.Entity<ApplicationUser>().HasData(
-                new ApplicationUser
-                {
-                    Id = "aaaaaaaa-aaaa-aaaa-aaaa-000000000001",
-                    UserName = "andrea",
-                    NormalizedUserName = "ANDREA",
-                    Email = "andrea@email.com",
-                    NormalizedEmail = "ANDREA@EMAIL.COM",
-                    EmailConfirmed = true,
-                    SecurityStamp = "SECSTAMP-STATIC-0000000000000001",
-                    ConcurrencyStamp = "CONCSTAMP-STATIC-000000000000001"
-                },
-                new ApplicationUser
-                {
-                    Id = "aaaaaaaa-aaaa-aaaa-aaaa-000000000002",
-                    UserName = "bruno",
-                    NormalizedUserName = "BRUNO",
-                    Email = "bruno@email.com",
-                    NormalizedEmail = "BRUNO@EMAIL.COM",
-                    EmailConfirmed = true,
-                    SecurityStamp = "SECSTAMP-STATIC-0000000000000002",
-                    ConcurrencyStamp = "CONCSTAMP-STATIC-000000000000002"
-                },
-                new ApplicationUser
-                {
-                    Id = "aaaaaaaa-aaaa-aaaa-aaaa-000000000003",
-                    UserName = "carla",
-                    NormalizedUserName = "CARLA",
-                    Email = "carla@email.com",
-                    NormalizedEmail = "CARLA@EMAIL.COM",
-                    EmailConfirmed = true,
-                    SecurityStamp = "SECSTAMP-STATIC-0000000000000003",
-                    ConcurrencyStamp = "CONCSTAMP-STATIC-000000000000003"
-                }
-            );
-
+      new ApplicationUser
+      {
+          Id = "aaaaaaaa-aaaa-aaaa-aaaa-000000000001",
+          UserName = "andrea",
+          NormalizedUserName = "ANDREA",
+          Email = "andrea@email.com",
+          NormalizedEmail = "ANDREA@EMAIL.COM",
+          EmailConfirmed = true,
+          SecurityStamp = "SECSTAMP-STATIC-0000000000000001",
+          ConcurrencyStamp = "CONCSTAMP-STATIC-000000000000001",
+          PasswordHash = "AQAAAAIAAYagAAAAENx4zxiRrAfPtkZV5vFfJ+RgEHgHrAvRjf6bdYMLzInq/XWu7gibD/0GBKoPO3EBEg=="
+      },
+      new ApplicationUser
+      {
+          Id = "aaaaaaaa-aaaa-aaaa-aaaa-000000000002",
+          UserName = "bruno",
+          NormalizedUserName = "BRUNO",
+          Email = "bruno@email.com",
+          NormalizedEmail = "BRUNO@EMAIL.COM",
+          EmailConfirmed = true,
+          SecurityStamp = "SECSTAMP-STATIC-0000000000000002",
+          ConcurrencyStamp = "CONCSTAMP-STATIC-000000000000002",
+          PasswordHash = "AQAAAAIAAYagAAAAENx4zxiRrAfPtkZV5vFfJ+RgEHgHrAvRjf6bdYMLzInq/XWu7gibD/0GBKoPO3EBEg=="
+      },
+      new ApplicationUser
+      {
+          Id = "aaaaaaaa-aaaa-aaaa-aaaa-000000000003",
+          UserName = "carla",
+          NormalizedUserName = "CARLA",
+          Email = "carla@email.com",
+          NormalizedEmail = "CARLA@EMAIL.COM",
+          EmailConfirmed = true,
+          SecurityStamp = "SECSTAMP-STATIC-0000000000000003",
+          ConcurrencyStamp = "CONCSTAMP-STATIC-000000000000003",
+          PasswordHash = "AQAAAAIAAYagAAAAENx4zxiRrAfPtkZV5vFfJ+RgEHgHrAvRjf6bdYMLzInq/XWu7gibD/0GBKoPO3EBEg=="
+      }
+  );
             // Categorias
             builder.Entity<Category>().HasData(
                 new Category { Category_Id = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-000000000001"), Name = "Electrónica" },
