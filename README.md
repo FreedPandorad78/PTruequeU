@@ -211,5 +211,5 @@ PTruequeU/
 
 ## Autores
 
-- [@FreedPandorad78](https://github.com/FreedPandorad78)
-- [@tgarcesm](https://github.com/tgarcesm)
+- [@FreedPandorad78](https://github.com/FreedPandorad78) : David Orozco 
+- [@tgarcesm](https://github.com/tgarcesm) : Tomás Garcés 
