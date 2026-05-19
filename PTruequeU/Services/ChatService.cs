@@ -63,7 +63,7 @@ namespace PTruequeU.Services
 
             var thread = new ChatThread
             {
-                ChatThread_Id = new Guid("9467e5f4-ea6e-416d-80c3-99bbc6e52877"),
+                ChatThread_Id = Guid.NewGuid(),
                 Listing_Id = dto.ListingId,
                 Buyer_Id = currentUserId,
                 Seller_Id = sellerId,
@@ -158,7 +158,7 @@ namespace PTruequeU.Services
 
             var message = new ChatMessage
             {
-                ChatMessage_Id = new Guid("af9fb3d2-5015-4e26-a72a-d523b8ab581f"),
+                ChatMessage_Id = Guid.NewGuid(),
                 Thread_Id = threadId,
                 Sender_Id = currentUserId,
                 Text = cleanText,
