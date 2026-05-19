@@ -154,6 +154,7 @@ Los siguientes usuarios se crean automáticamente con el seed:
 
 | Usuario | Email            | Contraseña | Rol   |
 |---------|------------------|------------|-------|
+| admin   | admin@email.com  | Test1234!  | Admin |
 | andrea  | andrea@email.com | Test1234!  | User  |
 | bruno   | bruno@email.com  | Test1234!  | User  |
 | carla   | carla@email.com  | Test1234!  | User  |
