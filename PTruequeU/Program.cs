@@ -46,6 +46,17 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendDev", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+             .AllowAnyHeader()
+             .AllowAnyMethod();
+    });
+});
+
 // Servicios app
 builder.Services.AddScoped<IListingService, ListingService>();
 builder.Services.AddScoped<IChatService, ChatService>();
@@ -76,9 +87,9 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
+app.UseCors("FrontendDev");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
