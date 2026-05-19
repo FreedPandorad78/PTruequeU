@@ -32,14 +32,15 @@ API desarrollada en ASP.NET Core para gestionar publicaciones, chats y reportes 
 ### Implementada actualmente
 - Autenticación con JWT (JSON Web Tokens).
 - Control de acceso a endpoints autenticados.
+- Autorización por roles (usuario/administrador).
+- Validación de ownership (solo el dueño modifica su recurso).
 - Asociación de datos por usuario (propietario de publicación, emisor de mensaje, reportante).
 - Restricciones de integridad para evitar combinaciones duplicadas en chats.
+- Suspensión de usuarios (usuarios suspendidos no pueden publicar).
 
 ### Planificada (siguiente fase)
-- Autorización por roles (usuario/administrador).
-- Políticas de autorización por endpoint.
-- Validación de ownership (solo el dueño modifica su recurso).
-- Endurecimiento de autenticación (expiración, refresh tokens).
+- Endurecimiento de autenticación (refresh tokens).
+- Políticas de autorización más granulares por endpoint.
 
 ---
 
@@ -48,6 +49,7 @@ API desarrollada en ASP.NET Core para gestionar publicaciones, chats y reportes 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
 - SQL Server activo
 - `dotnet-ef` instalado globalmente (opcional pero recomendado)
+
 ```bash
 dotnet tool install --global dotnet-ef
 ```
@@ -57,12 +59,14 @@ dotnet tool install --global dotnet-ef
 ## Configuración
 
 ### 1. Clonar repositorio
+
 ```bash
 git clone https://github.com/FreedPandorad78/PTruequeU.git
 cd PTruequeU
 ```
 
 ### 2. Configurar `appsettings.json`
+
 ```json
 {
   "ConnectionStrings": {
@@ -71,17 +75,19 @@ cd PTruequeU
   "Jwt": {
     "Key": "tu-clave-secreta-minimo-32-caracteres",
     "Issuer": "PTruequeU",
-    "Audience": "PTruequeU"
+    "Audience": "PTruequeUUsers"
   }
 }
 ```
 
 ### 3. Restaurar paquetes
+
 ```bash
 dotnet restore
 ```
 
 ### 4. Ejecutar la API
+
 ```bash
 dotnet run
 ```
@@ -93,9 +99,8 @@ dotnet run
 ## Documentación interactiva (Scalar)
 
 Una vez ejecutada la API, acceder a:
-```
-https://localhost:{puerto}/scalar/v1
-```
+
+http://localhost:5088/scalar/v1
 
 ### Cómo autorizarse en Scalar
 
@@ -119,9 +124,9 @@ Como alternativa a Scalar, se puede usar [Postman](https://www.postman.com/downl
 ### Flujo de autenticación en Postman
 
 **Paso 1 — Obtener el token:**
-```
-POST https://localhost:{puerto}/auth/login
-```
+
+POST http://localhost:5088/auth/login
+
 ```json
 {
   "email": "andrea@email.com",
@@ -136,11 +141,10 @@ En cada request, ir a la pestaña **Authorization**:
 - Token: pegar el JWT copiado del paso anterior
 
 **Paso 3 — Ejecutar cualquier endpoint protegido**, por ejemplo:
-```
-GET https://localhost:{puerto}/chats
-GET https://localhost:{puerto}/favorites
-GET https://localhost:{puerto}/api/Listings
-```
+
+GET http://localhost:5088/chats
+GET http://localhost:5088/favorites
+GET http://localhost:5088/api/Listings
 
 ---
 
@@ -148,11 +152,13 @@ GET https://localhost:{puerto}/api/Listings
 
 Los siguientes usuarios se crean automáticamente con el seed:
 
-| Usuario | Email            | Contraseña |
-|---------|------------------|------------|
-| andrea  | andrea@email.com | Test1234!  |
-| bruno   | bruno@email.com  | Test1234!  |
-| carla   | carla@email.com  | Test1234!  |
+| Usuario | Email            | Contraseña | Rol   |
+|---------|------------------|------------|-------|
+| andrea  | andrea@email.com | Test1234!  | User  |
+| bruno   | bruno@email.com  | Test1234!  | User  |
+| carla   | carla@email.com  | Test1234!  | User  |
+
+> Para probar el chat, iniciar sesión como **bruno** o **carla** e iniciar conversación en una publicación de **andrea**.
 
 ---
 
@@ -173,6 +179,7 @@ El proyecto incluye seed automático mediante `HasData` en `OnModelCreating`. No
 | Reportes             | 10       |
 
 ### Verificación rápida en SQL
+
 ```sql
 SELECT COUNT(*) AS UsersCount         FROM AspNetUsers;
 SELECT COUNT(*) AS CategoriesCount    FROM Categories;
@@ -191,13 +198,13 @@ PTruequeU/
 ├── Controllers/        # Endpoints de la API
 ├── Data/
 │   └── ApplicationDbContext.cs   # Contexto y seed
+├── DTOs/               # Objetos de transferencia de datos
 ├── Interfaces/         # Contratos de servicios
 ├── Models/             # Entidades del dominio
 ├── Services/           # Lógica de negocio
 ├── appsettings.json    # Configuración
 └── Program.cs          # Configuración general
 ```
-
 ---
 
 ## Notas
@@ -206,10 +213,11 @@ PTruequeU/
 - Al usar `HasData`, el seed se aplica una sola vez en la migración inicial.
 - La generación de chats respeta combinaciones únicas entre `Listing_Id`, `Buyer_Id` y `Seller_Id`.
 - Los endpoints de chats, favoritos y reportes filtran datos por el usuario autenticado.
+- El backend corre en HTTP en `http://localhost:5088` para compatibilidad con el frontend en desarrollo.
 
 ---
 
 ## Autores
 
-- [@FreedPandorad78](https://github.com/FreedPandorad78) : David Orozco 
-- [@tgarcesm](https://github.com/tgarcesm) : Tomás Garcés 
+- [@FreedPandorad78](https://github.com/FreedPandorad78) — David Orozco
+- [@tgarcesm](https://github.com/tgarcesm) — Tomás Garcés
