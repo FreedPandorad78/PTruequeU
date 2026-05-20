@@ -159,9 +159,11 @@ namespace PTruequeU.Services
 
             // Transiciones válidas del flujo:
             // Available -> Reserved
+            // Reserved  -> Available (el dueño desmarca la reserva)
             // Reserved  -> Sold
             bool validTransition =
                 (listing.State == ListingState.Available && dto.State == ListingState.Reserved) ||
+                (listing.State == ListingState.Reserved && dto.State == ListingState.Available) ||
                 (listing.State == ListingState.Reserved && dto.State == ListingState.Sold);
 
             if (!validTransition)
