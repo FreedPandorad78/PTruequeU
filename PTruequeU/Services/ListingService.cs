@@ -25,7 +25,7 @@ namespace PTruequeU.Services
         {
             var listing = new Listing
             {
-                Listing_id = new Guid("db4041b7-2f09-4f69-b59c-76e21b4f94dc"),
+                Listing_id = Guid.NewGuid(),
                 Title = dto.Title,
                 Description = dto.Description,
                 Condition = dto.Condition,
@@ -46,7 +46,7 @@ namespace PTruequeU.Services
             {
                 _context.ListingImages.Add(new ListingImage
                 {
-                    ListingImage_Id = new Guid("cf227f8e-3f40-4190-a844-e1842f086217"),
+                    ListingImage_Id = Guid.NewGuid(),
                     Listing_Id = listing.Listing_id,
                     ImageUrl = dto.ImageUrls[i],
                     DisplayOrder = i

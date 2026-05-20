@@ -38,7 +38,7 @@ namespace PTruequeU.Services
 
             var report = new Report
             {
-                Report_Id = new Guid("f12803f2-f343-4d39-97b0-8703e8e33545"),
+                Report_Id = Guid.NewGuid(),
                 Reporter_Id = reporterId,
                 ReportedListing_Id = listingId,
                 ReportedUser_Id = null,
@@ -70,7 +70,7 @@ namespace PTruequeU.Services
 
             var report = new Report
             {
-                Report_Id = new Guid("139dd3f9-aeb9-4aa5-85d2-56199149a555"),
+                Report_Id = Guid.NewGuid(),
                 Reporter_Id = reporterId,
                 ReportedUser_Id = reportedUserId,
                 ReportedListing_Id = null,

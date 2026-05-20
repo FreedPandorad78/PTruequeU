@@ -51,7 +51,7 @@ namespace PTruequeU.Services
 
             var action = new ModerationAction
             {
-                ModerationAction_Id = new Guid("1baf3c24 - 87d0 - 4f5e-9e22 - 8a22103df0ff"),
+                ModerationAction_Id = Guid.NewGuid(),
                 Admin_Id = adminId,
                 ActionType = ModerationActionType.HideListing,
                 TargetId = listingId.ToString(),
@@ -110,7 +110,7 @@ namespace PTruequeU.Services
 
             var action = new ModerationAction
             {
-                ModerationAction_Id = new Guid("87a324d7-0fa2-4b15-8eaf-9165edcfedeb"),
+                ModerationAction_Id = Guid.NewGuid(),
                 Admin_Id = adminId,
                 ActionType = ModerationActionType.SuspendUser,
                 TargetId = userId,
