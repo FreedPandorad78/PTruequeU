@@ -75,6 +75,58 @@ namespace PTruequeU.Services
             };
         }
 
+        public async Task<ModerationActionResponseDto?> ShowListing(string adminId, Guid listingId)
+        {
+            await EnsureIsAdmin(adminId);
+
+            var listing = await _context.Listings.FirstOrDefaultAsync(l => l.Listing_id == listingId);
+            if (listing == null)
+                return null;
+
+            if (!listing.IsHidden)
+            {
+                return new ModerationActionResponseDto
+                {
+                    ModerationActionId = Guid.Empty,
+                    AdminId = adminId,
+                    ActionType = ModerationActionType.HideListing,
+                    TargetId = listingId.ToString(),
+                    Reason = "Reactivación de publicación",
+                    CreatedAt = DateTime.UtcNow,
+                    WasApplied = false,
+                    Message = "La publicación ya estaba visible."
+                };
+            }
+
+            listing.IsHidden = false;
+            listing.UpdatedAt = DateTime.UtcNow;
+
+            var action = new ModerationAction
+            {
+                ModerationAction_Id = Guid.NewGuid(),
+                Admin_Id = adminId,
+                ActionType = ModerationActionType.HideListing,
+                TargetId = listingId.ToString(),
+                Reason = "Reactivación de publicación",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.ModerationActions.Add(action);
+            await _context.SaveChangesAsync();
+
+            return new ModerationActionResponseDto
+            {
+                ModerationActionId = action.ModerationAction_Id,
+                AdminId = action.Admin_Id,
+                ActionType = action.ActionType,
+                TargetId = action.TargetId,
+                Reason = action.Reason,
+                CreatedAt = action.CreatedAt,
+                WasApplied = true,
+                Message = "Publicación reactivada correctamente."
+            };
+        }
+
         public async Task<ModerationActionResponseDto?> SuspendUser(string adminId, string userId, SuspendUserRequestDto dto)
         {
             await EnsureIsAdmin(adminId);

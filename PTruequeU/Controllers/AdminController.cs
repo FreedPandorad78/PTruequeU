@@ -44,6 +44,25 @@ namespace PTruequeU.Controllers
             }
         }
 
+        [HttpPatch("listings/{id:guid}/show")]
+        public async Task<IActionResult> ShowListing(Guid id)
+        {
+            var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            try
+            {
+                var result = await _adminModerationService.ShowListing(adminId, id);
+                if (result == null)
+                    return NotFound("La publicación no existe.");
+
+                return Ok(result);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+        }
+
         [HttpPatch("users/{id}/suspend")]
         public async Task<IActionResult> SuspendUser(string id, [FromBody] SuspendUserRequestDto dto)
         {
