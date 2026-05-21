@@ -22,6 +22,10 @@ API desarrollada en ASP.NET Core para gestionar publicaciones, chats y reportes 
 - Chats entre comprador y vendedor.
 - Mensajes dentro de cada chat.
 - Reportes de usuarios o publicaciones.
+- Dashboard de administración (listar, crear y eliminar usuarios; suspender/reactivar cuentas).
+- Endpoint de perfil público `GET /users/{id}`.
+- Reactivar publicaciones ocultas desde el panel de admin.
+- Transición de estado `Reserved → Available` (el dueño puede desmarcar una reserva).
 - Seed de datos de prueba mediante `HasData` en `OnModelCreating`.
 - Persistencia con Entity Framework Core y SQL Server.
 
@@ -93,6 +97,44 @@ dotnet run
 ```
 
 > Las migraciones y el seed se aplican automáticamente al iniciar la API.
+
+---
+
+## Endpoints principales
+
+### Autenticación
+| Método | Ruta              | Descripción                        |
+|--------|-------------------|------------------------------------|
+| POST   | /auth/register    | Registrar nuevo usuario            |
+| POST   | /auth/login       | Iniciar sesión y obtener JWT       |
+
+### Usuarios
+| Método | Ruta              | Descripción                        |
+|--------|-------------------|------------------------------------|
+| GET    | /users/{id}       | Perfil público de un usuario       |
+
+### Publicaciones
+| Método | Ruta                          | Descripción                          |
+|--------|-------------------------------|--------------------------------------|
+| GET    | /api/Listings                 | Listar/buscar publicaciones          |
+| GET    | /api/Listings/{id}            | Detalle de una publicación           |
+| POST   | /api/Listings                 | Crear publicación (auth)             |
+| PUT    | /api/Listings/{id}            | Editar publicación (owner)           |
+| PATCH  | /api/Listings/{id}/state      | Cambiar estado (owner)               |
+| DELETE | /api/Listings/{id}            | Eliminar publicación (owner)         |
+
+### Administración (requiere rol Admin)
+| Método | Ruta                            | Descripción                          |
+|--------|---------------------------------|--------------------------------------|
+| GET    | /admin/users                    | Listar todos los usuarios            |
+| POST   | /admin/users                    | Crear usuario con rol asignado       |
+| DELETE | /admin/users/{id}               | Eliminar usuario                     |
+| PATCH  | /admin/users/{id}/suspend       | Suspender usuario                    |
+| PATCH  | /admin/users/{id}/unsuspend     | Reactivar usuario suspendido         |
+| PATCH  | /admin/listings/{id}/hide       | Ocultar publicación                  |
+| PATCH  | /admin/listings/{id}/show       | Reactivar publicación oculta         |
+| GET    | /admin/reports                  | Listar reportes                      |
+| GET    | /admin/audit                    | Registro de acciones de moderación   |
 
 ---
 
@@ -171,7 +213,7 @@ El proyecto incluye seed automático mediante `HasData` en `OnModelCreating`. No
 
 | Entidad              | Cantidad |
 |----------------------|----------|
-| Usuarios             | 3        |
+| Usuarios             | 4        |
 | Categorías           | 5        |
 | Publicaciones        | 15       |
 | Imágenes             | 35       |
