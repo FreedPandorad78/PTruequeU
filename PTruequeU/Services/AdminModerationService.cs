@@ -134,6 +134,61 @@ namespace PTruequeU.Services
             };
         }
 
+        public async Task<ModerationActionResponseDto?> UnsuspendUser(string adminId, string userId)
+        {
+            await EnsureIsAdmin(adminId);
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return null;
+
+            if (!user.IsSuspended)
+            {
+                return new ModerationActionResponseDto
+                {
+                    ModerationActionId = Guid.Empty,
+                    AdminId = adminId,
+                    ActionType = ModerationActionType.SuspendUser,
+                    TargetId = userId,
+                    Reason = "Reactivación de cuenta",
+                    CreatedAt = DateTime.UtcNow,
+                    WasApplied = false,
+                    Message = "El usuario no estaba suspendido."
+                };
+            }
+
+            user.IsSuspended = false;
+            var updateResult = await _userManager.UpdateAsync(user);
+
+            if (!updateResult.Succeeded)
+                throw new InvalidOperationException(string.Join(" | ", updateResult.Errors.Select(e => e.Description)));
+
+            var action = new ModerationAction
+            {
+                ModerationAction_Id = Guid.NewGuid(),
+                Admin_Id = adminId,
+                ActionType = ModerationActionType.SuspendUser,
+                TargetId = userId,
+                Reason = "Reactivación de cuenta",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.ModerationActions.Add(action);
+            await _context.SaveChangesAsync();
+
+            return new ModerationActionResponseDto
+            {
+                ModerationActionId = action.ModerationAction_Id,
+                AdminId = action.Admin_Id,
+                ActionType = action.ActionType,
+                TargetId = action.TargetId,
+                Reason = action.Reason,
+                CreatedAt = action.CreatedAt,
+                WasApplied = true,
+                Message = "Cuenta reactivada correctamente."
+            };
+        }
+
         public async Task<List<ModerationActionResponseDto>> GetAudit()
         {
             var actions = await _context.ModerationActions

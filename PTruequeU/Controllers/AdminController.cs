@@ -70,6 +70,29 @@ namespace PTruequeU.Controllers
             }
         }
 
+        [HttpPatch("users/{id}/unsuspend")]
+        public async Task<IActionResult> UnsuspendUser(string id)
+        {
+            var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            try
+            {
+                var result = await _adminModerationService.UnsuspendUser(adminId, id);
+                if (result == null)
+                    return NotFound("El usuario no existe.");
+
+                return Ok(result);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("reports")]
         public async Task<IActionResult> GetReports()
         {
