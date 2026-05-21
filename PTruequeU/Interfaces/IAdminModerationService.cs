@@ -8,6 +8,7 @@ namespace PTruequeU.Interfaces
         Task<ModerationActionResponseDto?> ShowListing(string adminId, Guid listingId);
         Task<ModerationActionResponseDto?> SuspendUser(string adminId, string userId, SuspendUserRequestDto dto);
         Task<ModerationActionResponseDto?> UnsuspendUser(string adminId, string userId);
+        Task<List<AdminUserResponseDto>> GetAllUsers();
         Task<List<ModerationActionResponseDto>> GetAudit();
     }
 }

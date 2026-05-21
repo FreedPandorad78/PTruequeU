@@ -112,6 +112,13 @@ namespace PTruequeU.Controllers
             }
         }
 
+        [HttpGet("users")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _adminModerationService.GetAllUsers();
+            return Ok(users);
+        }
+
         [HttpGet("reports")]
         public async Task<IActionResult> GetReports()
         {

@@ -241,6 +241,22 @@ namespace PTruequeU.Services
             };
         }
 
+        public async Task<List<AdminUserResponseDto>> GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+
+            return users.Select(u => new AdminUserResponseDto
+            {
+                Id = u.Id,
+                UserName = u.UserName ?? string.Empty,
+                Email = u.Email ?? string.Empty,
+                FullName = u.FullName,
+                ProgramName = u.ProgramName,
+                Rating = u.Rating,
+                IsSuspended = u.IsSuspended
+            }).ToList();
+        }
+
         public async Task<List<ModerationActionResponseDto>> GetAudit()
         {
             var actions = await _context.ModerationActions
