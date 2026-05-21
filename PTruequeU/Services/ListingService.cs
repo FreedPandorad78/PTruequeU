@@ -61,14 +61,18 @@ namespace PTruequeU.Services
 
         // Obtiene un listing por ID incluyendo usuario, categoría e imágenes.
         // Si está oculto (IsHidden), no se devuelve.
-        public async Task<ListingResponseDto?> GetById(Guid id)
+        public async Task<ListingResponseDto?> GetById(Guid id, bool isAdmin = false)
         {
-            var listing = await _context.Listings
+            var query = _context.Listings
                 .Include(l => l.User)
                 .Include(l => l.Category)
                 .Include(l => l.Images.OrderBy(i => i.DisplayOrder))
-                .Where(l => !l.IsHidden)
-                .FirstOrDefaultAsync(l => l.Listing_id == id);
+                .AsQueryable();
+
+            if (!isAdmin)
+                query = query.Where(l => !l.IsHidden);
+
+            var listing = await query.FirstOrDefaultAsync(l => l.Listing_id == id);
 
             if (listing == null) return null;
 

@@ -36,7 +36,8 @@ namespace PTruequeU.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<ListingResponseDto>> GetById(Guid id)
         {
-            var listing = await _listingService.GetById(id);
+            var isAdmin = User.FindFirstValue(ClaimTypes.Role) == "Admin";
+            var listing = await _listingService.GetById(id, isAdmin);
             if (listing == null) return NotFound();
             return Ok(listing);
         }

@@ -5,7 +5,7 @@ namespace PTruequeU.Interfaces
     public interface IListingService
     {
         Task<ListingResponseDto> Create(string userId, CreateListingDto dto);
-        Task<ListingResponseDto?> GetById(Guid id);
+        Task<ListingResponseDto?> GetById(Guid id, bool isAdmin = false);
         Task<List<ListingResponseDto>> Search(ListingSearchDto search, string userId, bool isAdmin);
         Task<ListingResponseDto?> Update(Guid id, string userId, UpdateListingDto dto);
         Task<ListingResponseDto?> UpdateState(Guid id, string userId, UpdateListingStateDto dto);
