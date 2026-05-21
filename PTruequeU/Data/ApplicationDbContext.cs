@@ -185,6 +185,8 @@ namespace PTruequeU.Data
           EmailConfirmed = true,
           IsSuspended = false,
           Rating = 0.0,
+          FullName = "Administrador",
+          ProgramName = "Administración",
           SecurityStamp = "SECSTAMP-STATIC-0000000000000000",
           ConcurrencyStamp = "CONCSTAMP-STATIC-000000000000000",
           PasswordHash = "AQAAAAIAAYagAAAAENx4zxiRrAfPtkZV5vFfJ+RgEHgHrAvRjf6bdYMLzInq/XWu7gibD/0GBKoPO3EBEg=="
@@ -197,6 +199,8 @@ namespace PTruequeU.Data
           Email = "andrea@email.com",
           NormalizedEmail = "ANDREA@EMAIL.COM",
           EmailConfirmed = true,
+          FullName = "Andrea García",
+          ProgramName = "Ingeniería de Sistemas",
           SecurityStamp = "SECSTAMP-STATIC-0000000000000001",
           ConcurrencyStamp = "CONCSTAMP-STATIC-000000000000001",
           PasswordHash = "AQAAAAIAAYagAAAAENx4zxiRrAfPtkZV5vFfJ+RgEHgHrAvRjf6bdYMLzInq/XWu7gibD/0GBKoPO3EBEg=="
@@ -209,6 +213,8 @@ namespace PTruequeU.Data
           Email = "bruno@email.com",
           NormalizedEmail = "BRUNO@EMAIL.COM",
           EmailConfirmed = true,
+          FullName = "Bruno Martínez",
+          ProgramName = "Administración de Empresas",
           SecurityStamp = "SECSTAMP-STATIC-0000000000000002",
           ConcurrencyStamp = "CONCSTAMP-STATIC-000000000000002",
           PasswordHash = "AQAAAAIAAYagAAAAENx4zxiRrAfPtkZV5vFfJ+RgEHgHrAvRjf6bdYMLzInq/XWu7gibD/0GBKoPO3EBEg=="
@@ -221,6 +227,8 @@ namespace PTruequeU.Data
           Email = "carla@email.com",
           NormalizedEmail = "CARLA@EMAIL.COM",
           EmailConfirmed = true,
+          FullName = "Carla López",
+          ProgramName = "Diseño Industrial",
           SecurityStamp = "SECSTAMP-STATIC-0000000000000003",
           ConcurrencyStamp = "CONCSTAMP-STATIC-000000000000003",
           PasswordHash = "AQAAAAIAAYagAAAAENx4zxiRrAfPtkZV5vFfJ+RgEHgHrAvRjf6bdYMLzInq/XWu7gibD/0GBKoPO3EBEg=="
