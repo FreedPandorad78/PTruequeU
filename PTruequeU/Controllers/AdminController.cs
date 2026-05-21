@@ -119,6 +119,40 @@ namespace PTruequeU.Controllers
             return Ok(users);
         }
 
+        [HttpPost("users")]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDto dto)
+        {
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
+
+            try
+            {
+                var result = await _adminModerationService.CreateUser(dto);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("users/{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            try
+            {
+                var deleted = await _adminModerationService.DeleteUser(id);
+                if (!deleted)
+                    return NotFound("El usuario no existe.");
+
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("reports")]
         public async Task<IActionResult> GetReports()
         {

@@ -9,6 +9,8 @@ namespace PTruequeU.Interfaces
         Task<ModerationActionResponseDto?> SuspendUser(string adminId, string userId, SuspendUserRequestDto dto);
         Task<ModerationActionResponseDto?> UnsuspendUser(string adminId, string userId);
         Task<List<AdminUserResponseDto>> GetAllUsers();
+        Task<AdminUserResponseDto> CreateUser(CreateUserRequestDto dto);
+        Task<bool> DeleteUser(string userId);
         Task<List<ModerationActionResponseDto>> GetAudit();
     }
 }

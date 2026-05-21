@@ -241,6 +241,48 @@ namespace PTruequeU.Services
             };
         }
 
+        public async Task<AdminUserResponseDto> CreateUser(CreateUserRequestDto dto)
+        {
+            var user = new ApplicationUser
+            {
+                UserName = dto.Email,
+                Email = dto.Email,
+                FullName = dto.FullName,
+                ProgramName = dto.ProgramName,
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(user, dto.Password);
+            if (!result.Succeeded)
+                throw new InvalidOperationException(string.Join(" | ", result.Errors.Select(e => e.Description)));
+
+            await _userManager.AddToRoleAsync(user, dto.Role);
+
+            return new AdminUserResponseDto
+            {
+                Id = user.Id,
+                UserName = user.UserName ?? string.Empty,
+                Email = user.Email ?? string.Empty,
+                FullName = user.FullName,
+                ProgramName = user.ProgramName,
+                Rating = user.Rating,
+                IsSuspended = user.IsSuspended
+            };
+        }
+
+        public async Task<bool> DeleteUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return false;
+
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+                throw new InvalidOperationException(string.Join(" | ", result.Errors.Select(e => e.Description)));
+
+            return true;
+        }
+
         public async Task<List<AdminUserResponseDto>> GetAllUsers()
         {
             var users = await _userManager.Users.ToListAsync();
