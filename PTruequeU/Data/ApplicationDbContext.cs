@@ -177,6 +177,20 @@ namespace PTruequeU.Data
             builder.Entity<ApplicationUser>().HasData(
       new ApplicationUser
       {
+          Id = "aaaaaaaa-aaaa-aaaa-aaaa-000000000000",
+          UserName = "admin",
+          NormalizedUserName = "ADMIN",
+          Email = "admin@email.com",
+          NormalizedEmail = "ADMIN@EMAIL.COM",
+          EmailConfirmed = true,
+          IsSuspended = false,
+          Rating = 0.0,
+          SecurityStamp = "SECSTAMP-STATIC-0000000000000000",
+          ConcurrencyStamp = "CONCSTAMP-STATIC-000000000000000",
+          PasswordHash = "AQAAAAIAAYagAAAAENx4zxiRrAfPtkZV5vFfJ+RgEHgHrAvRjf6bdYMLzInq/XWu7gibD/0GBKoPO3EBEg=="
+      },
+      new ApplicationUser
+      {
           Id = "aaaaaaaa-aaaa-aaaa-aaaa-000000000001",
           UserName = "andrea",
           NormalizedUserName = "ANDREA",
@@ -212,6 +226,14 @@ namespace PTruequeU.Data
           PasswordHash = "AQAAAAIAAYagAAAAENx4zxiRrAfPtkZV5vFfJ+RgEHgHrAvRjf6bdYMLzInq/XWu7gibD/0GBKoPO3EBEg=="
       }
   );
+            builder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>
+                {
+                    UserId = "aaaaaaaa-aaaa-aaaa-aaaa-000000000000",
+                    RoleId = "11111111-1111-1111-1111-111111111111"
+                }
+            );
+
             // Categorias
             builder.Entity<Category>().HasData(
                 new Category { Category_Id = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-000000000001"), Name = "Electrónica" },
